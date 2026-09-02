@@ -12,32 +12,30 @@ Microscope computer
 
 BEACON computer
 - Python 3.9 or greater
-- Python modules: gpcam v8.0.4, numpy, sys, pickle, pyzmq, matplotlib, pyqt
-- Module installation instructions: pip install gpcam==8.0.4 pyzmq
+- Core Python modules: gpcam v8.0.4, numpy, pyzmq
+- GUI Python modules: PyQt5, matplotlib
+- Core installation: `pip install -r requirements-core.txt`
+- GUI installation: `pip install -r requirements-gui.txt`
 
 # Installation
 BEACON uses a client-server model that allows the Bayesian optimization to be handled by a different computer to the one controlling the microscope (they can also be run on the same computer).
 
 1) Clone or download this repository.
 2) Move Server.py to the computer controlling the microscope and the CEOS corrector (Microscope computer).
-3) Move GUI_Client.py to the computer that you wish to run the Bayesian optimization on (BEACON computer).
+3) Move `beacon_client.py` and either `GUI_Client.py` or your own client program to the computer that you wish to run the Bayesian optimization on (BEACON computer).
 
 # Opening BEACON
 1) Open the CEOS RPC Gateway on your microscope computer.
-2) On your microscope computer, run `BEACON_Server.bat' (Start menu on NCEM computers)
-
---OR--
-
 2) On your microscope computer, run `python Server.py --serverport <IP port address for server> --rpchost <IP host address of CEOS RPC gateway> --rpcport <IP port address of CEOS RPC gateway>`.
 3) On your BEACON computer, run `python GUI_Client.py --serverhost <IP host address of server> --serverport <IP port address of server>`.
 
 --OR--
 
-3) On your BEACON computer, run `python Scripted.py --serverhost <IP host address of server> --serverport <IP port address of server>`.
+3) On your BEACON computer, run `python beacon_parameter_optimizer.py --serverhost <IP host address of server> --serverport <IP port address of server>`.
 Note: Default IP addresses are: `--serverhost 'localhost', --serverport 7001, --rpchost 'localhost', --rpcport 7072`
 Note: The `Connected to 'host' at 'port'` message on the client is meaningless. The way to determine if it has truly connected is to look at the server output and see `ping` after you have opened the client. I will fix this in a future update.
 
-# Setting up BEACON
+# Setting up BEACON GUI
 Click the checkboxes next to aberrations you want to correct and select the upper and lower search bounds for the optimization. These bounds are relative to the current state (i.e. 0 is the current value).
 
 `Image Shape (x,y)`: shape of the images used in the optimization.
@@ -66,7 +64,7 @@ Click the checkboxes next to aberrations you want to correct and select the uppe
 
 `Compensate with Beam Shift`: NOT RECOMMENDED. This was an alternative to cross-correlation for maintaining the field of view, which was required to test third-order aberrations. However, this appears to introduce extra aberrations that make this method worthless. Only use for testing.
 
-# Running BEACON
+# Running BEACON optimization
 Once all parameters have been set, click `Start` to begin.
 
 `Stop` stops the optimization run mid-run. Suggested corrections can be accepted or rejected at this stage.
